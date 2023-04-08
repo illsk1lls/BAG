@@ -16,4 +16,4 @@ The process works in reverse for fullBAG.cmd
 When fullBAG is clicked, the file is converted from BASE64 back to its original state with its original name, and fullBAG
 exports itself back into emptyBAG.cmd and deletes itself.
 
-Extra care has been taken to make sure BAG is able to run as a single line of code
+Extra care and unnecessary stress has been endured to ensure BAG is able to run as a single line of code ;P
