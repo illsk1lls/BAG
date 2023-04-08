@@ -1,4 +1,4 @@
-# BAG
+# BAG - A command that uses its own wrapper to store/extract files.
 Drag and drop an item onto 'emptyBAG.cmd' to place it inside the bag. Double click 'fullBAG.cmd' to empty the bag.
 
 IMPORTANT! ~50mb max file size allowed, NO DASHES ( - ) in filenames allowed. Single file only (can be anything)
