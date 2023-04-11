@@ -29,3 +29,4 @@ ENDLOCAL
 DEL "%TEMP%\%~n0.003" /F /Q>nul
 powershell -nop -c ^(get-content '%~f0' -totalcount 31^) ^| set-content '%~dp0emptyBAG.cmd' >nul
 GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
+::
