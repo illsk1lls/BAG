@@ -23,7 +23,7 @@ IF %~z1 GEQ 74400000 ECHO File Exceeds Safe Size Limit! ^(~70mb^) & PAUSE & EXIT
 IF "%~n0"=="fullBAG" EXIT /b
 ECHO FILLING BAG...
 CERTUTIL -ENCODE -F %1 "%TEMP%\%~n1.000">nul
-powershell -nop -c ^(Get-Content '%TEMP%\%~n1.000'^) -replace '^^^','::' -replace '-----BEGIN CERTIFICATE-----','%~n1%~x1::' -replace '-----END CERTIFICATE-----','%~n1%~x1::' ^| Set-Content '%TEMP%\%~n1.001' >nul
+powershell -nop -c ^(Get-Content '%TEMP%\%~n1.000'^) -replace '^^^','::' -replace '-----BEGIN CERTIFICATE-----','%~nx1::' -replace '-----END CERTIFICATE-----','%~nx1::' ^| Set-Content '%TEMP%\%~n1.001' >nul
 DEL "%TEMP%\%~n1.000" /F /Q>nul
 powershell -nop -c Add-Content -Path '%~f0' -Value ^(Get-Content -Path '"%TEMP%\%~n1.001"'^) >nul
 DEL "%TEMP%\%~n1.001" /F /Q>nul
