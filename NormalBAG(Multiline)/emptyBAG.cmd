@@ -5,7 +5,21 @@
 >nul 2>&1 del %temp%\runas.Admin /f /q 
 IF NOT [%1]==[] (CALL :FILLBAG %1) ELSE (CALL :EMPTYBAG %1)
 EXIT
+:EMPTYBAG
+IF "%~n0"=="emptyBAG" EXIT /b
+ECHO EMPTYING BAG...
+powershell -nop -c $file=Get-Content '%~f0'; $r=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[2].Value.Replace^(' ',"""`n"""^).Replace^('::',''^) ^| Set-Content '%TEMP%\%~n0.003' >nul
+powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 32^) ^| Set-Content '%TEMP%\%~n0.002' >nul
+SET /p FNAME=<"%TEMP%\%~n0.002" 
+DEL "%TEMP%\%~n0.002" /F /Q>nul
+SETLOCAL ENABLEDELAYEDEXPANSION
+CERTUTIL -DECODE -F "%TEMP%\%~n0.003" "%~dp0!FNAME::=!" >nul
+ENDLOCAL
+DEL "%TEMP%\%~n0.003" /F /Q>nul
+powershell -nop -c ^(get-content '%~f0' -totalcount 32^) ^| set-content '%~dp0emptyBAG.cmd' >nul
+GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
 :FILLBAG
+IF %~z1 GEQ 74400000 ECHO File Exceeds Safe Size Limit! ^(~70mb^) & PAUSE & EXIT /b
 IF "%~n0"=="fullBAG" EXIT /b
 ECHO FILLING BAG...
 CERTUTIL -ENCODE -F %1 "%TEMP%\%~n1.000">nul
@@ -16,17 +30,3 @@ DEL "%TEMP%\%~n1.001" /F /Q>nul
 DEL %1 /F /Q>nul
 COPY /Y "%~f0" "%~dp0fullBAG.cmd" >nul
 GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
-:EMPTYBAG
-IF "%~n0"=="emptyBAG" EXIT /b
-ECHO EMPTYING BAG...
-powershell -nop -c $file=Get-Content '%~f0'; $r=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[2].Value.Replace^(' ',"""`n"""^).Replace^('::',''^) ^| Set-Content '%TEMP%\%~n0.003' >nul
-powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 31^) ^| Set-Content '%TEMP%\%~n0.002' >nul
-SET /p FNAME=<"%TEMP%\%~n0.002" 
-DEL "%TEMP%\%~n0.002" /F /Q>nul
-SETLOCAL ENABLEDELAYEDEXPANSION
-CERTUTIL -DECODE -F "%TEMP%\%~n0.003" "%~dp0!FNAME::=!" >nul
-ENDLOCAL
-DEL "%TEMP%\%~n0.003" /F /Q>nul
-powershell -nop -c ^(get-content '%~f0' -totalcount 31^) ^| set-content '%~dp0emptyBAG.cmd' >nul
-GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
-::
