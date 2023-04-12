@@ -30,3 +30,4 @@ DEL "%TEMP%\%~n1.001" /F /Q>nul
 DEL %1 /F /Q>nul
 COPY /Y "%~f0" "%~dp0fullBAG.cmd" >nul
 GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
+::
