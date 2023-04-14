@@ -1,4 +1,7 @@
-@ECHO OFF
+@ECHO OFF & SET "PARAM=%1" & SET "PARAMS=%*"
+SET "PARAM=%PARAM:"=%
+SET "PARAMS=%PARAMS:"=%
+IF NOT "%PARAM%" == "%PARAMS%" ECHO Multiple files not supported! & PAUSE & EXIT /b
 >nul 2>&1 reg add hkcu\software\classes\.Admin\shell\runas\command /f /ve /d "cmd /x /d /r set \"f0=%%2\"& call \"%%2\" %%3"& set _= %*
 >nul 2>&1 fltmc|| if "%f0%" neq "%~f0" (cd.>"%temp%\runas.Admin" & start "%~n0" /high "%temp%\runas.Admin" "%~f0" "%_:"=""%" & exit /b)
 >nul 2>&1 reg delete hkcu\software\classes\.Admin\ /f
@@ -9,14 +12,14 @@ EXIT
 IF "%~n0"=="emptyBAG" EXIT /b
 ECHO EMPTYING BAG...
 powershell -nop -c $file=Get-Content '%~f0'; $r=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[2].Value.Replace^(' ',"""`n"""^).Replace^('::',''^) ^| Set-Content '%TEMP%\%~n0.003' >nul
-powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 32^) ^| Set-Content '%TEMP%\%~n0.002' >nul
+powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 35^) ^| Set-Content '%TEMP%\%~n0.002' >nul
 SET /p FNAME=<"%TEMP%\%~n0.002" 
 DEL "%TEMP%\%~n0.002" /F /Q>nul
 SETLOCAL ENABLEDELAYEDEXPANSION
 CERTUTIL -DECODE -F "%TEMP%\%~n0.003" "%~dp0!FNAME::=!" >nul
 ENDLOCAL
 DEL "%TEMP%\%~n0.003" /F /Q>nul
-powershell -nop -c ^(get-content '%~f0' -totalcount 32^) ^| set-content '%~dp0emptyBAG.cmd' >nul
+powershell -nop -c ^(get-content '%~f0' -totalcount 35^) ^| set-content '%~dp0emptyBAG.cmd' >nul
 GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
 :FILLBAG
 IF %~z1 GEQ 74400000 ECHO File Exceeds Safe Size Limit! ^(~70mb^) & PAUSE & EXIT /b
