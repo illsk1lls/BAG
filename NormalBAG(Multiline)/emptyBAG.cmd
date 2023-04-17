@@ -20,7 +20,7 @@ CERTUTIL -DECODE -F "%TEMP%\%~n0.003" "%~dp0!FNAME::=!" >nul
 ENDLOCAL
 DEL "%TEMP%\%~n0.003" /F /Q>nul
 powershell -nop -c ^(get-content '%~f0' -totalcount 37^) ^| set-content '%~dp0emptyBAG.cmd' >nul
-GOTO 2>nul & del "%~f0" /F /Q>nul & PAUSE & EXIT /b
+GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
 :FILLBAG
 IF NOT %~z1 GEQ 1 ECHO Empty files not allowed! & PAUSE & EXIT /b
 IF %~z1 GEQ 74400000 ECHO File Exceeds Safe Size Limit! ^(~70mb^) & PAUSE & EXIT /b
@@ -34,5 +34,5 @@ powershell -nop -c Add-Content -Path '%~f0' -Value ^(Get-Content -Path '"%TEMP%\
 DEL "%TEMP%\%~n1.001" /F /Q>nul
 DEL %1 /F /Q>nul
 COPY /Y "%~f0" "%~dp0fullBAG.cmd" >nul
-GOTO 2>nul & del "%~f0" /F /Q>nul & PAUSE & EXIT /b
+GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
 ::
