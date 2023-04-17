@@ -12,18 +12,20 @@ EXIT
 IF "%~n0"=="emptyBAG" ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & PAUSE & EXIT /b
 ECHO EMPTYING BAG...
 powershell -nop -c $file=Get-Content '%~f0'; $r=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[2].Value.Replace^(' ',"""`n"""^).Replace^('::',''^) ^| Set-Content '%TEMP%\%~n0.003' >nul
-powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 35^) ^| Set-Content '%TEMP%\%~n0.002' >nul
+powershell -nop -c ^(Get-Content '%~f0' ^| Select-Object -Skip 37^) ^| Set-Content '%TEMP%\%~n0.002' >nul
 SET /p FNAME=<"%TEMP%\%~n0.002" 
 DEL "%TEMP%\%~n0.002" /F /Q>nul
 SETLOCAL ENABLEDELAYEDEXPANSION
 CERTUTIL -DECODE -F "%TEMP%\%~n0.003" "%~dp0!FNAME::=!" >nul
 ENDLOCAL
 DEL "%TEMP%\%~n0.003" /F /Q>nul
-powershell -nop -c ^(get-content '%~f0' -totalcount 35^) ^| set-content '%~dp0emptyBAG.cmd' >nul
-GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
+powershell -nop -c ^(get-content '%~f0' -totalcount 37^) ^| set-content '%~dp0emptyBAG.cmd' >nul
+GOTO 2>nul & del "%~f0" /F /Q>nul & PAUSE & EXIT /b
 :FILLBAG
+IF NOT %~z1 GEQ 1 ECHO Empty files not allowed! & PAUSE & EXIT /b
 IF %~z1 GEQ 74400000 ECHO File Exceeds Safe Size Limit! ^(~70mb^) & PAUSE & EXIT /b
-IF "%~n0"=="fullBAG" ECHO The BAG is already full! Open the BAG to empty it. & EXIT /b
+IF EXIST %1\* ECHO Folders are not supported! Single file only.. & PAUSE & EXIT /b
+IF "%~n0"=="fullBAG" ECHO The BAG is already full! Open the BAG to empty it. & PAUSE & EXIT /b
 ECHO FILLING BAG...
 CERTUTIL -ENCODE -F %1 "%TEMP%\%~n1.000">nul
 powershell -nop -c ^(Get-Content '%TEMP%\%~n1.000'^) -replace '^^^','::' -replace '-----BEGIN CERTIFICATE-----','%~nx1::' -replace '-----END CERTIFICATE-----','%~nx1::' ^| Set-Content '%TEMP%\%~n1.001' >nul
@@ -32,5 +34,5 @@ powershell -nop -c Add-Content -Path '%~f0' -Value ^(Get-Content -Path '"%TEMP%\
 DEL "%TEMP%\%~n1.001" /F /Q>nul
 DEL %1 /F /Q>nul
 COPY /Y "%~f0" "%~dp0fullBAG.cmd" >nul
-GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
+GOTO 2>nul & del "%~f0" /F /Q>nul & PAUSE & EXIT /b
 ::
