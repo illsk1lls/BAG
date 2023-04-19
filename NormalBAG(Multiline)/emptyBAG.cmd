@@ -6,7 +6,7 @@ IF NOT "%PARAM%" == "%PARAMS%" ECHO You can only put one thing at a time in the 
 >nul 2>&1 fltmc|| if "%f0%" neq "%~f0" (cd.>"%temp%\runas.Admin" & start "%~n0" /high "%temp%\runas.Admin" "%~f0" "%_:"=""%" & exit /b)
 >nul 2>&1 reg delete hkcu\software\classes\.Admin\ /f
 >nul 2>&1 del %temp%\runas.Admin /f /q 
-IF NOT [%1]==[] (CALL :FILLBAG %1) ELSE (CALL :EMPTYBAG %1)
+IF NOT [%1]==[] (CALL :FILLBAG %1) ELSE (CALL :EMPTYBAG)
 EXIT
 :EMPTYBAG
 IF "%~n0"=="emptyBAG" ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & PAUSE & EXIT /b
