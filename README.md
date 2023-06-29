@@ -17,10 +17,10 @@ BAG uses Powershell and CertUtil.exe to convert any file to BASE64 and add it to
 
 The process works in reverse for fullBAG.cmd 
 
-When fullBAG is clicked, the file is converted from BASE64 back to its original state with its original name, and fullBAG
+When fullBAG.cmd is clicked, the file is converted from BASE64 back to its original state with its original name, and fullBAG.cmd
 exports itself back into emptyBAG.cmd and deletes itself.
 
------ Alternatively -----
+Also:
 
 Single line BAG is just for fun and a frivolous puzzle. A waste of time.. How much of the multi-line BAG can we get to run on a single line?? We may never know ;P
 *For single line bag, at present NO SPACES OR SPECIAL CHARS ("()!@#$%^&*-+;:') in filenames/paths allowed.
