@@ -21,6 +21,6 @@ EXIT /b
 :EMPTYBAG
 IF "%~n0"=="emptyBAG" ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
 IF %~z0 GEQ 80000000 (ECHO EMPTYING BAG... ^(This may take a while^)) ELSE (ECHO EMPTYING BAG...)
-POWERSHELL -nop -c $file=Get-Content '%~f0'; $name=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[1].Value.Replace^('::',''^).Trim^(^); $data=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^).Groups[2].Value.Replace^('::',''^).Trim^(^); [IO.File]::WriteAllBytes(\"$name\", [Convert]::FromBase64String($data)); ^(get-content '%~f0' -totalcount 26^) ^| set-content '%~dp0emptyBAG.cmd' >nul
+POWERSHELL -nop -c $file=Get-Content '%~f0'; $match=[regex]::Match^($file,'\:\:^([^^^\:]+^)\:\:^(.+?^)\:\:\1\:\:'^); $name=$match.Groups[1].Value.Replace^('::',''^).Trim^(^); $data=$match.Groups[2].Value.Replace^('::',''^).Trim^(^); [IO.File]::WriteAllBytes(\"$name\", [Convert]::FromBase64String($data)); ^(get-content '%~f0' -totalcount 26^) ^| set-content '%~dp0emptyBAG.cmd' >nul
 GOTO 2>nul & del "%~f0" /F /Q>nul & EXIT /b
-EXIT /b
+EXIT /b 
