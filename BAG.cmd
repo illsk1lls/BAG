@@ -14,4 +14,4 @@ EXIT /b
 IF %~z0 LSS 1730 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
 IF %~z0 GEQ 80000000 (ECHO EMPTYING BAG... ^(This may take a while^)) ELSE (ECHO EMPTYING BAG...)
 POWERSHELL -nop -c "$file=Get-Content '%~f0'; $match=[regex]::Matches($file,'\:\:([^\:]+)\:\:(.+?)\:\:\1\:\:') | Foreach-Object {$name=$_.Groups[1].Value; $data=$_.Groups[2].Value; [IO.File]::WriteAllBytes("""$name""", [Convert]::FromBase64String($data))}; (Get-Content '%~f0' -TotalCount 17) | Set-Content '%~f0'">nul
-EXIT /b  
+EXIT /b
