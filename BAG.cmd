@@ -3,7 +3,7 @@
 >nul 2>&1 FLTMC|| IF "%f0%" NEQ "%~f0" (CD.>"%temp%\runas.Admin" & START "%~n0" /high "%temp%\runas.Admin" "%~f0" "%_:"=""%" & EXIT /b)
 >nul 2>&1 REG DELETE HKCU\Software\Classes\.Admin\ /f
 >nul 2>&1 DEL %temp%\runas.Admin /f
-IF [%*]==[] (CALL :EMPTYBAG) ELSE (ECHO FILLING BAG... & ECHO. & FOR %%i IN (%*) DO (CALL :FILLBAG %%i))
+IF [%1]==[] (CALL :EMPTYBAG) ELSE (ECHO FILLING BAG... & ECHO. & FOR %%i IN (%*) DO (CALL :FILLBAG %%i))
 IF %N%==1 (ECHO. & PAUSE & EXIT) ELSE (EXIT)
 :FILLBAG
 IF EXIST %1\* ECHO [Folder - Ignored] - %~nx1 - Folders are not supported! & SET N=1 & EXIT /b
