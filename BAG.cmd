@@ -8,9 +8,9 @@ IF %N%==1 (ECHO. & PAUSE & EXIT) ELSE (EXIT)
 :FILLBAG
 IF EXIST %1\* ECHO [Folder - Ignored] - %~nx1 - Folders are not supported! & SET N=1 & EXIT /b
 IF %~z1 LSS 1 ECHO [File   - Ignored] - %~nx1 - Empty files are not supported! & SET N=1 & EXIT /b
-IF %~z1 GEQ 765000000 ECHO [    WARNING!    ] - %~nx1 - Not Added! The file is too large! & SET N=1 & EXIT /b
-SET /A Size=(%~z0 + %~z1) * (120 / 100)
-IF %Size% GEQ 1024000000 ECHO [    WARNING!    ] - %~nx1 - Not Added! There is not enough room in the BAG! & SET N=1 & EXIT /b
+IF %~z1 GEQ 760000000 ECHO [    WARNING!    ] - %~nx1 - Not Added! The file is too large! & SET N=1 & EXIT /b
+SET /A Size=(%~z0 + %~z1) * (118 / 100)
+IF %Size% GEQ 1000000000 ECHO [    WARNING!    ] - %~nx1 - Not Added! There is not enough room in the BAG! & SET N=1 & EXIT /b
 ECHO.>>"%~f0" & POWERSHELL -nop -c "Add-Content '%~f0' """:^:%~nx1:^:""" -NoNewline; [Convert]::ToBase64String([IO.File]::ReadAllBytes("""%~1""")) | Add-Content """%~f0""" -NoNewline; Add-Content '%~f0' """:^:%~nx1:^:""" -NoNewline" & DEL /F "%~1">nul
 EXIT /b
 :EMPTYBAG
