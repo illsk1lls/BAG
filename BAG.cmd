@@ -11,7 +11,7 @@ IF %~z1 LSS 1 ECHO [File   - Ignored] - %~nx1 - Empty files are not supported! &
 ECHO. >>"%~f0" & POWERSHELL -nop -c "Add-Content '%~f0' """:^:%~nx1:^:""" -NoNewline; [Convert]::ToBase64String([IO.File]::ReadAllBytes("""%~1""")) | Add-Content """%~f0""" -NoNewline; Add-Content '%~f0' """:^:%~nx1:^:""" -NoNewline" & DEL /F "%~1">nul
 EXIT /b
 :EMPTYBAG
-IF %~z0 LSS 1590 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
+IF %~z0 LSS 1680 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
 IF %~z0 GEQ 80000000 (ECHO EMPTYING BAG... ^(This may take a while^)) ELSE (ECHO EMPTYING BAG...)
-POWERSHELL -nop -c "$file=Get-Content '%~f0'; $match=[regex]::Matches($file,'\:\:([^^\:]+)\:\:(.+?)\:\:\1\:\:') | Foreach-Object {$name=$_.Groups[1].Value; $data=$_.Groups[2].Value; [IO.File]::WriteAllBytes("""$name""", [Convert]::FromBase64String($data))}; (Get-Content '%~f0' -TotalCount 17) | Set-Content '%~f0'">nul
+POWERSHELL -nop -c "$file=Get-Content '%~f0'; $match=[regex]::Matches($file,'\:\:([^^\:]+)\:\:(.+?)\:\:\1\:\:') | Foreach-Object {$name=$_.Groups[1].Value; $fname=$name; while(Test-Path -Path """%~dp0$fname""") { $n++; $fname="""($n)$name""" }; $data=$_.Groups[2].Value; [IO.File]::WriteAllBytes("""$fname""", [Convert]::FromBase64String($data))}; (Get-Content '%~f0' -TotalCount 17) | Set-Content '%~f0'">nul
 EXIT /b
