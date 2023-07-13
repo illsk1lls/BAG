@@ -10,3 +10,4 @@ BAG uses Powershell to convert any file to BASE64 and add it to itself. It then 
 When the BAG is emptied the files inside are converted from BASE64 back to their original state with their original names, extraction times are ~3 Min per 1GB
 
 (*Folders and empty files are not supported and will be ignored/skipped if dropped onto the bag)
+(**Windows 7 not supported)
