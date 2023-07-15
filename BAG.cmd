@@ -11,7 +11,7 @@ IF EXIST %1\* ECHO [Folder - Ignored] - %~nx1 - Folders are not supported! & SET
 IF %~z1 LSS 1 ECHO [File - Ignored] - %~nx1 - Empty files are not supported! & SET ERR=1 & EXIT /b
 IF %~z1 GEQ 750000000 ECHO [File - Ignored] - %~nx1 - Not Added! The file is too large! & SET ERR=1 & EXIT /b
 SET /A SIZE=(%~z0 + %~z1) * (130 / 100)
-IF %SIZE% GEQ 980000000 ECHO [File - Ignored] - %~nx1 - Not Added! There is not enough room in the BAG! & SET ERR=1 & EXIT /b
+IF %SIZE% GEQ 980000000 ECHO [File - Skipped] - %~nx1 - Not Added! There is not enough room in the BAG! & SET ERR=1 & EXIT /b
 ECHO.>>"%~f0" &>nul 2>&1 POWERSHELL -nop -c "$fn=[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("^""%~nx1"^"")); AC '%~f0' "^""::$fn::"^"" -NoNewline; [Convert]::ToBase64String([IO.File]::ReadAllBytes("^""%~1"^"")) | AC "^""%~f0"^"" -NoNewline; AC '%~f0' "^""::$fn::"^"" -NoNewline" & DEL /F "%~1"
 EXIT /b
 :EMPTYBAG
