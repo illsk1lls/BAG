@@ -2,7 +2,7 @@
 >nul 2>&1 REG ADD HKCU\Software\Classes\.theBAG\shell\runas\command /f /ve /d "CMD /x /d /r SET \"f0=%%2\"& call \"%%2\" %%3"& SET _= %*
 >nul 2>&1 FLTMC|| IF "%f0%" NEQ "%~f0" (CD.>"%temp%\elevate.theBAG" & START "%~n0" /high "%temp%\elevate.theBAG" "%~f0" "%_:"=""%" & EXIT /b)
 >nul 2>&1 REG DELETE HKCU\Software\Classes\.theBAG\ /f &>nul 2>&1 DEL %temp%\elevate.theBAG /f
-FOR /F "usebackq skip=2 tokens=3-4" %%i IN (`REG QUERY "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName 2^>nul`) DO SET "VER=%%i %%j"
+FOR /F "usebackq skip=2 tokens=3,4" %%i IN (`REG QUERY "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName 2^>nul`) DO SET "VER=%%i %%j"
 IF NOT "%VER%"=="Windows 10" ECHO. & ECHO UNSUPPORTED SYSTEM DETECTED! & ECHO. & PAUSE & EXIT
 IF [%1]==[] (CALL :EMPTYBAG) ELSE (SETLOCAL ENABLEDELAYEDEXPANSION & ECHO FILLING BAG... & ECHO. & FOR %%i IN (!DROP!) DO (ENDLOCAL & CALL :FILLBAG %%i))
 IF %ERR%==1 (ECHO. & PAUSE & EXIT) ELSE (EXIT)
