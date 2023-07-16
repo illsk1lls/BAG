@@ -12,10 +12,10 @@ IF %~z1 LSS 1 ECHO [File - Ignored] - %~nx1 - Empty files are not supported! & S
 IF %~z1 GEQ 750000000 ECHO [File - Ignored] - %~nx1 - Not Added! The file is too large! & SET ERR=1 & EXIT /b
 SET /A SIZE=(%~z0 + %~z1) * (130 / 100)
 IF %SIZE% GEQ 980000000 ECHO [File - Skipped] - %~nx1 - Not Added! There is not enough room in the BAG! & SET ERR=1 & EXIT /b
-ECHO.>>"%~f0" &>nul 2>&1 POWERSHELL -nop -c "$fn=[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("^""%~nx1"^"")); AC '%~f0' "^""::$fn::"^"" -NoNewline; [Convert]::ToBase64String([IO.File]::ReadAllBytes("^""%~1"^"")) | AC "^""%~f0"^"" -NoNewline; AC '%~f0' "^""::$fn::"^"" -NoNewline" & DEL /F "%~1"
+ECHO.>>"%~f0" &>nul 2>&1 POWERSHELL -nop -c "$fn=[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("^""%~nx1"^"")); AC '%~f0' "^""::$fn::"^"" -NoNewline; $fi=Get-Item '%~1'; $i=$fi.OpenRead(); $o=[System.IO.MemoryStream]::new(); $g=[System.IO.Compression.GZipStream]::new($o,[System.IO.Compression.CompressionLevel]::Optimal); $i.CopyTo($g); $g.Dispose(); $o.Dispose(); $i.Dispose(); [Convert]::ToBase64String($o.ToArray()) | AC '%~f0' -NoNewline; AC '%~f0' "^""::$fn::"^"" -NoNewline" & DEL /F "%~1"
 EXIT /b
 :EMPTYBAG
-IF %~z0 LSS 2382 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
+IF %~z0 LSS 2805 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
 IF %~z0 GEQ 80000000 (ECHO EMPTYING BAG... ^(This may take a while^)) ELSE (ECHO EMPTYING BAG...)
->nul 2>&1 POWERSHELL -nop -c "$f=GC '%~f0'; $m=[regex]::Matches($f,'::([^^:]+)::(.+?)::\1::') | %% {$n1=$_.Groups[1].Value; $n2=[System.Text.Encoding]::Utf8.GetString([System.Convert]::FromBase64String("^""$n1"^"")); $fn=$n2; while(Test-Path -Path "^""%~dp0$fn"^"") { $n++; $fn="^""($n)$n2"^"" }; $d=$_.Groups[2].Value; [IO.File]::WriteAllBytes("^""$fn"^"", [Convert]::FromBase64String($d));$n=0}; (GC '%~f0' -TotalCount 21) | SC '%~f0'"
+>nul 2>&1 POWERSHELL -nop -c "$f=GC '%~f0'; $m=[regex]::Matches($f,'::([^^:]+)::(.+?)::\1::') | Select-Object -Skip 1 | %% {$n1=$_.Groups[1].Value; $n2=[System.Text.Encoding]::Utf8.GetString([System.Convert]::FromBase64String("^""$n1"^"")); $fn=$n2; while(Test-Path -Path "^""%~dp0$fn"^"") { $n++; $fn="^""($n)$n2"^"" }; $d=$_.Groups[2].Value; $i=[System.IO.MemoryStream]::new([Convert]::FromBase64String($d)); $o=(New-Item "^""$fn"^"" -Force).OpenWrite(); $g=[System.IO.Compression.GZipStream]::new($i,[System.IO.Compression.CompressionMode]::Decompress); $g.CopyTo($o); $g.Dispose(); $o.Dispose(); $i.Dispose(); $n=0}; (GC '%~f0' -TotalCount 21) | SC '%~f0'"
 EXIT /b
