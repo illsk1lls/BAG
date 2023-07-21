@@ -10,9 +10,9 @@ IF %ERR%==1 (ECHO. & PAUSE & EXIT) ELSE (EXIT)
 IF EXIST %1\* ECHO [Folder - Ignored] - "%~nx1" - Folders are not supported! & SET ERR=1 & EXIT /b
 IF %~z1 LSS 1 ECHO [File - Ignored] - "%~nx1" - Empty files are not supported! & SET ERR=1 & EXIT /b
 IF %~z1 GEQ 525000000 ECHO [File - Ignored] - "%~nx1" - Not Added! The file is too large! & SET ERR=1 & EXIT /b
-SET /A SIZE=(%~z0 + %~z1) * (130 / 100) & SET "FN=%~nx1"
+SET /A SIZE=(%~z0 + %~z1) * (130 / 100) & SET "FN=%~nx1" & SET "FP=%~1"
 IF %SIZE% GEQ 525000000 ECHO [File - Skipped] - "%~nx1" - Not Added! There is not enough room in the BAG! & SET ERR=1 & EXIT /b
-ECHO.>>"%~f0" &>nul 2>&1 POWERSHELL -nop -c "$fn=[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('%FN:'=''%')); AC '%~f0' "^""::$fn::"^"" -NoNewline; $fn1='%FN:'=''%'; $fn2=$fn1.Replace('[','``[').Replace(']','``]'); $fi=Get-Item "^""$fn2"^""; $i=$fi.OpenRead(); $o=[System.IO.MemoryStream]::new(); $g=[System.IO.Compression.GZipStream]::new($o,[System.IO.Compression.CompressionLevel]::Optimal); $i.CopyTo($g); $g.Dispose(); $o.Dispose(); $i.Dispose(); [Convert]::ToBase64String($o.ToArray()) | AC '%~f0' -NoNewline; AC '%~f0' "^""::$fn::"^"" -NoNewline" & DEL /F "%~1"
+ECHO.>>"%~f0" &>nul 2>&1 POWERSHELL -nop -c "$fn=[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('%FN:'=''%')); AC '%~f0' "^""::$fn::"^"" -NoNewline; $fn1='%FP:'=''%'; $fn2=$fn1.Replace('[','``[').Replace(']','``]'); $fi=Get-Item "^""$fn2"^""; $i=$fi.OpenRead(); $o=[System.IO.MemoryStream]::new(); $g=[System.IO.Compression.GZipStream]::new($o,[System.IO.Compression.CompressionLevel]::Optimal); $i.CopyTo($g); $g.Dispose(); $o.Dispose(); $i.Dispose(); [Convert]::ToBase64String($o.ToArray()) | AC '%~f0' -NoNewline; AC '%~f0' "^""::$fn::"^"" -NoNewline" & DEL /F "%~1"
 EXIT /b
 :EMPTYBAG
 IF %~z0 LSS 3087 ECHO The BAG is already empty, drag-and-drop something onto the BAG to put it inside. ;^) & ECHO. & PAUSE & EXIT /b
