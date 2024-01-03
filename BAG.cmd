@@ -7,7 +7,6 @@ IF NOT "%VER%"=="Windows 10" ECHO.&ECHO UNSUPPORTED SYSTEM DETECTED!&ECHO.&PAUSE
 IF [%1]==[] (CALL :EMPTYBAG) ELSE (SETLOCAL ENABLEDELAYEDEXPANSION&ECHO FILLING BAG...&ECHO.&FOR %%# IN (!DROP!) DO (ENDLOCAL&CALL :FILLBAG %%#))
 IF %ERR%==1 (ECHO.&PAUSE&EXIT) ELSE (PAUSE&EXIT)
 :FILLBAG
-SET /A SIZE=(%~z0 + %~z1) * (130 / 100) & SET "FN=%~nx1" & SET "FP=%~1"
 IF EXIST %1\* ECHO [Folder - Ignored] - "%~nx1" - Folders are not supported!&SET ERR=1&EXIT/b
 IF %~z1 LSS 1 ECHO [File - Ignored] - "%~nx1" - Empty files are not supported!&SET ERR=1&EXIT/b
 IF %~z1 GEQ 525000000 ECHO [File - Ignored] - "%~nx1" - Not Added! The file is too large!&SET ERR=1&EXIT/b
