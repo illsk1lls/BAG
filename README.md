@@ -1,6 +1,6 @@
 # BAG - A command that uses its own wrapper to store/extract files. (Compression Enabled - GZip)
 
-<h2>*Warning* When you drop a file into the BAG, the original is deleted.. because that is the point, you are putting it in the BAG. Do NOT use original copies! Make a copy of the file(s) and drop that in. I've done everything I can to make BAG as reliable as possible but if an error occurs the file is gone. Use caution. ;)</h2>
+<h2>*Warning* When you drop a file into the BAG, the original is -->DELETED<-- - because that is the point, you are putting it in the BAG. Do NOT use original copies! Make a copy of the file(s) and drop that in. I've done everything I can to make BAG as reliable as possible but if an error occurs the file is gone. Use caution. ;)</h2>
 
 Drag and drop items onto 'BAG.cmd' to place them inside the bag. Double click 'BAG.cmd' to empty the bag. 
 
